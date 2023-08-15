@@ -4,5 +4,5 @@ package main
 
 import (
 	//mage:import
-	_ "github.com/ntnn/magefiles/mages"
+	_ "github.com/ntnn/magefiles/base"
 )

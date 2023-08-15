@@ -1,4 +1,4 @@
-package mages
+package base
 
 import (
 	"fmt"
@@ -18,12 +18,12 @@ import (
 // import (
 //
 //	//mage:import
-//	"github.com/ntnn/magefiles/mages"
+//	"github.com/ntnn/magefiles/base"
 //
 // )
 //
 //	func init() {
-//		mages.PreGenerateDeletePatterns = []string{
+//		base.PreGenerateDeletePatterns = []string{
 //			"_gen.go",
 //		}
 //	}
