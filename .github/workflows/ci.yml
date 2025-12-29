@@ -16,4 +16,5 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version-file: go.mod
-      - run: go run ./mage.go all
+      - run: go install github.com/magefile/mage@latest
+      - run: mage all
