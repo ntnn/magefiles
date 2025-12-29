@@ -1,10 +1,6 @@
 package base
 
 import (
-	"fmt"
-	"runtime"
-	"strings"
-
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
@@ -24,7 +20,7 @@ import (
 //
 //	func init() {
 //		base.PreGenerateDeletePatterns = []string{
-//			"_gen.go",
+//			"*_gen.go",
 //		}
 //	}
 var PreGenerateDeletePatterns = []string{
@@ -49,37 +45,17 @@ func preGenerateDelete() error {
 // PreGenerate allows to add more dependencies to Generate.
 var PreGenerate = []any{}
 
+// Generate runs go generate.
 func Generate() error {
-	mg.Deps(append(PreGenerate, preGenerateDelete)...)
+	mg.Deps(preGenerateDelete)
+	mg.Deps(PreGenerate...)
 	return sh.RunV("go", "generate", "./...")
-}
-
-// Check runs golangci-lint.
-func Check() error {
-	return sh.RunV("go", "run", "github.com/golangci/golangci-lint/cmd/golangci-lint", "run", "./...")
-}
-
-// Lint runs golangci-lint with the given argument.
-// Due to a limitation in mage the argument has to be quoted:
-// https://github.com/magefile/mage/issues/340 is resolved
-//
-// E.g.:
-//
-//	go run ./mage.go default:lint 'completion zsh'
-func Lint(subcmd string) error {
-	return sh.RunV(
-		"go",
-		append(
-			[]string{"run", "github.com/golangci/golangci-lint/cmd/golangci-lint"},
-			strings.Split(subcmd, " ")...,
-		)...,
-	)
 }
 
 // Test runs `go test` with coverage and parallelism enabled.
 // Parallelism is set to the number of available CPUs.
 func Test() error {
-	return sh.RunV("go", "test", "-parallel", fmt.Sprintf("%d", runtime.NumCPU()), "-cover", "./...")
+	return sh.RunV("go", "test", "-cover", "./...")
 }
 
 // All runs generate, check and test in order.
